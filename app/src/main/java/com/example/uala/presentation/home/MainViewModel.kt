@@ -64,10 +64,6 @@ class MainViewModel(
         filteredCities = cities.filter { city ->
             val matchesFavouriteFilter = !isFavouritesOnly.value || city.isFavourite
             val matchesSearchQuery = city.name.lowercase().startsWith(searchQueryLower, ignoreCase = true)
-
-//            isFavouritesOnly.value && city.isFavourite ||
-//                    !isFavouritesOnly.value &&
-//            city.name.lowercase().startsWith(searchQuery.value.lowercase(), ignoreCase = true)
             matchesFavouriteFilter && matchesSearchQuery
         }
     }
@@ -84,7 +80,6 @@ class MainViewModel(
             withContext(Dispatchers.IO) {
                 try {
                     repository.toggleFavourite(city)
-                    delay(1000)
                 } catch (e: Exception){
                     e.printStackTrace()
                 }

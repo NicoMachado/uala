@@ -28,7 +28,7 @@ class CitiesRepositoryImpl(
 
     override suspend fun toggleFavourite(city: City) {
         cities = cities.map {
-            if (it.name == city.name) {
+            if (it.id == city.id) {
                 it.copy(isFavourite = !it.isFavourite)
             } else {
                 it
