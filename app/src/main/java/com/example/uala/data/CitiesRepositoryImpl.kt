@@ -14,7 +14,6 @@ class CitiesRepositoryImpl(
     override suspend fun getCities(): List<City> {
         cities.ifEmpty {
             val citiesResult = dataSource.getCities()
-            Log.d("CitiesRepositoryImpl", "getCities: $citiesResult")
             citiesResult.onSuccess {
                 cities = it.map { c -> c.toModel() }
             }
