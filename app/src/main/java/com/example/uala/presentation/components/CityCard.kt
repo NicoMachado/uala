@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -31,17 +32,16 @@ import com.example.uala.domain.models.City
 @Composable
 fun CityCard(
     city: City,
-    isLoading: Boolean = false,
+    isToggling: Boolean = false,
     onToggleFavourite: (City) -> Unit,
-    onNavigateToMap: (City.Coord) -> Unit,
-    onOpenInfoScreen: (City) -> Unit
+    onNavigateToMap: (City) -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable { onNavigateToMap(city.coordinate) }, // Navega al mapa al hacer clic en la Card
+            .clickable { onNavigateToMap(city) }, // Navega al mapa al hacer clic en la Card
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Título: Ciudad y País
@@ -63,10 +63,9 @@ fun CityCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isLoading) {
+                if (isToggling) {
                     CircularProgressIndicator(
-                        modifier = Modifier
-                        .padding(end = 16.dp)
+                        modifier = Modifier.size(8.dp).padding(end = 16.dp)
                     )
                 } else {
                     IconButton(onClick = {
@@ -82,9 +81,6 @@ fun CityCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-//                Button(onClick = { onOpenInfoScreen(city) }) {
-//                    Text("Info")
-//                }
                 Button(onClick = { showDialog = true }) {
                     Text("Info")
                 }

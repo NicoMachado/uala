@@ -1,5 +1,6 @@
 package com.example.uala.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.example.uala.data.CitiesRepositoryImpl
 import com.example.uala.data.datasource.RemoteDataSource
 import com.example.uala.data.remote.ApiService
@@ -16,7 +17,7 @@ val appModule = module {
     single { RemoteDataSource(get()) }
     single { CitiesRepositoryImpl(get()) }
 
-    viewModel<MainViewModel> { MainViewModel(get()) }
+    viewModel { (handle: SavedStateHandle) -> MainViewModel(get(), handle) }
 }
 
 fun provideRetrofit(): Retrofit {

@@ -3,13 +3,13 @@ package com.example.uala.presentation.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uala.data.CitiesRepositoryImpl
 import com.example.uala.domain.models.City
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -21,21 +21,21 @@ sealed class MainScreenEvents {
 }
 
 class MainViewModel(
-    private val repository: CitiesRepositoryImpl
+    private val repository: CitiesRepositoryImpl,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    var cities by mutableStateOf< List<City>>( emptyList())
+    private var cities by mutableStateOf< List<City>>( emptyList())
         private set
 
-    //    var isLoading = mutableStateOf(true)
-    //        private set
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
     val _isTogglingMap = MutableStateFlow<Map<Int, Boolean>>(emptyMap())
     var isTogglingMap = _isTogglingMap.asStateFlow()
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery = _searchQuery.asStateFlow()
+    //private val _searchQuery = MutableStateFlow("")
+    //val searchQuery = _searchQuery.asStateFlow()
+    val searchQuery = savedStateHandle.getStateFlow("searchQuery", "")
 
     private val _isFavouritesOnly = MutableStateFlow(false)
     val isFavouritesOnly = _isFavouritesOnly.asStateFlow()
@@ -69,7 +69,7 @@ class MainViewModel(
     }
 
     fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
+        savedStateHandle["searchQuery"] = query
         filterCities() // Filtramos la lista cuando el texto de búsqueda cambia
     }
     fun toggleFavourite(city: City) {
@@ -91,18 +91,9 @@ class MainViewModel(
         }
     }
 
-    fun isCityToggling(cityId: Int): Boolean {
-        return isTogglingMap.value[cityId] == true
-    }
-
     fun onToggleFavourites(onlyFavourites: Boolean) {
         _isFavouritesOnly.value = onlyFavourites
         filterCities()
     }
 
-    fun navigateToCityMap(cordinates: City.Coord) {
-        viewModelScope.launch {
-            eventChannel.send(MainScreenEvents.NavigateToMap(cordinates.lat, cordinates.lon))
-        }
-    }
 }

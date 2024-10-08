@@ -30,8 +30,6 @@ fun CityMapScreen(
     onBack: () -> Unit = {}
 ) {
     val cityLocation = LatLng(lat, lon)
-
-    // Recordar la posición de la cámara
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(cityLocation, 10f)
     }
@@ -60,15 +58,12 @@ fun CityMapScreen(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState
             ) {
-                // Agregar un marcador en la posición de la ciudad
                 Marker(
                     state = MarkerState(position = cityLocation),
                     title = name,
                     snippet = "Lat: $lat, Lon: $lon"
                 )
             }
-            // Aquí puedes agregar la lógica para mostrar un mapa con las coordenadas
-            Text(text = "Mapa de la ciudad: Lat $lat, Lon $lon")
         }
     }
 
