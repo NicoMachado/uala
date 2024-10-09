@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.uala.data.CitiesRepositoryImpl
 import com.example.uala.domain.models.City
+import com.example.uala.domain.repository.CitiesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ sealed class MainScreenEvents {
 }
 
 class MainViewModel(
-    private val repository: CitiesRepositoryImpl,
+    private val repository: CitiesRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private var cities by mutableStateOf< List<City>>( emptyList())

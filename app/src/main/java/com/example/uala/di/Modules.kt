@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.example.uala.data.CitiesRepositoryImpl
 import com.example.uala.data.datasource.RemoteDataSource
 import com.example.uala.data.remote.ApiService
+import com.example.uala.domain.repository.CitiesRepository
 import com.example.uala.presentation.home.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -15,7 +16,7 @@ val appModule = module {
     single { provideApiService(get()) }
 
     single { RemoteDataSource(get()) }
-    single { CitiesRepositoryImpl(get()) }
+    single<CitiesRepository> { CitiesRepositoryImpl(get()) }
 
     viewModel { (handle: SavedStateHandle) -> MainViewModel(get(), handle) }
 }
